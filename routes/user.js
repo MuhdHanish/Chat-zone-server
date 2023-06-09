@@ -1,19 +1,10 @@
 const express = require('express');
 const router = express();
+const userController = require('../controller/userController');
 
-const chats = require('../data/data');
-
-router.get('/',(req,res)=>{
- res.send('user get method...');
-})
-
-router.get('/api/chat',(req,res)=>{
- res.send(chats);
-})
-
-router.get('/api/chat/:id',(req,res)=>{
- const chat = chats.find(chat=>chat._id===req.params.id);
- res.send(chat);
-})
+// GET 
+router.get('/',userController.getHome)
+router.get('/api/chat',userController.getChats)
+router.get('/api/chat/:id',userController.getChat)
 
 module.exports = router;
