@@ -1,0 +1,29 @@
+{
+  "name": "mern-chat-backend",
+  "version": "1.0.0",
+  "description": "this is a simple chat app's server side using node,express and mongodb",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MuhdHanish/Mern-Chat-Server-Side.git"
+  },
+  "author": "muhd-hanish",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MuhdHanish/Mern-Chat-Server-Side/issues"
+  },
+  "homepage": "https://github.com/MuhdHanish/Mern-Chat-Server-Side#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
