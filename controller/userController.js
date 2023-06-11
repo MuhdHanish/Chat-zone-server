@@ -36,7 +36,7 @@ module.exports = {
  registerUser: async (req, res) => {
   try {
    const { name, email, password, image } = req.body;
-   const userExist = await userCollection.findOne({ emai: email })
+   const userExist = await userCollection.findOne({ email: email })
    if (userExist) {
     res.status(400).json({ message: 'Email is already registered' });
     return;
