@@ -1,5 +1,6 @@
 const express = require('express');
 const connect = require('./config/connection');
+const { notFound, errorHandler } = require('./middleware/errorMiddeleware');
 
 const colors = require('colors');
 
@@ -19,8 +20,11 @@ app.use(cors({
  methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 
-const userRouter = require('./routes/user')
+const userRouter = require('./routes/user');
 app.use('/',userRouter)
+
+app.use(notFound)
+app.use(errorHandler)
 
 const PORT = process.env.PORT 
 app.listen(PORT,()=>console.log(`Server started on port ${PORT}...`.green.underline))
