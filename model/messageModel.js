@@ -14,7 +14,7 @@ const messageModel  = Schema(
    ref: 'Chat'
   }
  },{
-  timestamp: true
+  timestamps: true
  }
 );
 

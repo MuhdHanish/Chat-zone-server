@@ -1,7 +1,11 @@
 const express = require('express');
-const app = express();
+const connect = require('./config/connection');
 
-require('dotenv').config()
+const colors = require('colors');
+
+const app = express();
+require('dotenv').config();
+connect();
 
 const logger = require('morgan');
 app.use(logger('dev'));
@@ -19,4 +23,4 @@ const userRouter = require('./routes/user')
 app.use('/',userRouter)
 
 const PORT = process.env.PORT 
-app.listen(PORT,()=>console.log(`Server started on port ${PORT}...`))
+app.listen(PORT,()=>console.log(`Server started on port ${PORT}...`.green.underline))
