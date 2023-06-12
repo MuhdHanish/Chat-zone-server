@@ -20,7 +20,6 @@ module.exports = {
      { email: { $regex: req.query.search, $options: "i" } }
     ]
    } : {}
-   console.log(keyWord)
    const users = await userCollection.find(keyWord).find({_id: { $ne: req.user._id }})
    if(users){
     res.status(200).json({ message: 'Users fetched successfully', users: users })

@@ -4,11 +4,21 @@ const userCollection = require("../model/userModel");
 module.exports = {
  fetchChats: async (req, res) => {
   try {
-   const chats = datas;
-   res.status(200).json({ message: 'Datas fetched successfully', chats: chats })
+   chatCollection.find({ users: { $elemMatch: { $eq: req.user._id } } })
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password")
+    .populate("latestMessage")
+    .sort({ updatedAt: -1 })
+    .then(async (results) => {
+     results = await userCollection.populate(results, {
+      path: "latestMessage.sender",
+      select: "name email profile"
+     });
+     res.status(200).json({ message: 'Datas fetched successfully', chats: results })
+    });
    return;
   } catch (err) {
-   res.status(500).json({ message: err.message });
+   res.status(400).json({ message: err.message });
    return;
   }
  },
@@ -27,24 +37,57 @@ module.exports = {
     ]
    }).populate("users", "-password").populate("latestMessage");
 
-   isChat = await userCollection.populate(isChat,{
-    path:"latestMessage",
+   isChat = await userCollection.populate(isChat, {
+    path: "latestMessage.sender",
     select: "name email profile"
-   })
-   if(isChat.length>0){
+   });
+   if (isChat.length > 0) {
     res.status(200).json({ message: 'Data accessed sucessfully', chat: isChat[0] })
     return;
-   }else{
-    const userData = {
+   } else {
+    const chatData = {
      chatName: 'sender',
      isGroupChat: false,
-     users : [req.user._id,userId]
+     users: [req.user._id, userId]
     }
-    return;
+    try {
+     const createdChat = await chatCollection.create(chatData);
+     const fullChat = await chatCollection.findOne({ _id: createdChat._id }).populate("users", "-password");
+     res.status(201).json({ message: 'FullChat accessed successfully', fullChat: fullChat });
+     return;
+    } catch (err) {
+     res.status(400).json({ message: err.message })
+    }
    }
   } catch (err) {
    res.status(500).json({ message: err.message });
    return;
   }
  },
+ createGroupChat: async (req, res) => {
+  try {
+   if(!req.body.users||!req.body.name){
+    res.status(400).json({message:'Please fill the feilds'});
+    return;
+   }
+   const users = JSON.parse(req.body.users);
+   if(users.length<2){
+    res.status(400).json({message:"More than 2 users are requried"})
+   }
+   users.push(req.user);
+   const groupChat = await chatCollection.create({
+    chatName: req.body.name,
+    users:users,
+    isGroupChat:true,
+    groupAdmin:req.user
+   });
+   const fullGroupChat = await chatCollection.findOne({_id:groupChat._id})
+   .populate("users","-password")
+   .populate("groupAdmin","-password");
+   res.status(201).json({message:"Group chat created successfully",fullGroupChat:fullGroupChat});
+   return
+  }catch(err){
+
+  }
+ }
 }
