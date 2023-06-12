@@ -18,7 +18,7 @@ module.exports = {
     });
    return;
   } catch (err) {
-   res.status(400).json({ message: err.message });
+   res.status(500).json({ message: err.message });
    return;
   }
  },
@@ -66,28 +66,93 @@ module.exports = {
  },
  createGroupChat: async (req, res) => {
   try {
-   if(!req.body.users||!req.body.name){
-    res.status(400).json({message:'Please fill the feilds'});
+   if (!req.body.users || !req.body.name) {
+    res.status(400).json({ message: 'Please fill the feilds' });
     return;
    }
    const users = JSON.parse(req.body.users);
-   if(users.length<2){
-    res.status(400).json({message:"More than 2 users are requried"})
+   if (users.length < 2) {
+    res.status(400).json({ message: "More than 2 users are requried" })
    }
    users.push(req.user);
    const groupChat = await chatCollection.create({
     chatName: req.body.name,
-    users:users,
-    isGroupChat:true,
-    groupAdmin:req.user
+    users: users,
+    isGroupChat: true,
+    groupAdmin: req.user
    });
-   const fullGroupChat = await chatCollection.findOne({_id:groupChat._id})
-   .populate("users","-password")
-   .populate("groupAdmin","-password");
-   res.status(201).json({message:"Group chat created successfully",fullGroupChat:fullGroupChat});
+   const fullGroupChat = await chatCollection.findOne({ _id: groupChat._id })
+    .populate("users", "-password")
+    .populate("groupAdmin", "-password");
+   res.status(201).json({ message: "Group chat created successfully", fullGroupChat: fullGroupChat });
    return
-  }catch(err){
+  } catch (err) {
+   res.status(500).json({ message: err.message })
+  }
+ },
+ renameGroup: async (req, res) => {
+  try {
+   const { chatId, chatName } = req.body;
+   const updatedChat = await chatCollection.findByIdAndUpdate(
+    chatId,
+    {
+     chatName: chatName
+    },
+    {
+     new: true
+    }
+   ).populate("users", "-password")
+    .populate("groupAdmin", "-password");
 
+   if (!updatedChat) {
+    res.status(400).json({ message: "Chat not found" });
+    return
+   } else {
+    res.status(201).json({ message: "Renamed sucessfully", updatedChat: updatedChat })
+    return;
+   }
+  } catch (err) {
+   res.status(500).json({ message: err.message })
+  }
+ },
+ addToGroup: async (req, res) => {
+  const { chatId, userId } = req.body;
+  const added = await chatCollection.findByIdAndUpdate(
+   chatId,
+   {
+    $push: { users: userId }
+   }, {
+   new: true
+  }
+  ).populate("users", "-password")
+   .populate("groupAdmin", "-password");
+
+  if (!added) {
+   res.status(400).json({ message: "Chat not found" });
+   return;
+  } else {
+   res.status(201).json({ message: "Added to group successfully", added: added })
+   return;
+  }
+ },
+ removeFromGroup: async (req, res) => {
+  const { chatId, userId } = req.body;
+  const removed = await chatCollection.findByIdAndUpdate(
+   chatId,
+   {
+    $pull: { users: userId }
+   }, {
+   new: true
+  }
+  ).populate("users", "-password")
+   .populate("groupAdmin", "-password");
+
+  if (!removed) {
+   res.status(400).json({ message: "Chat not found" });
+   return;
+  } else {
+   res.status(201).json({ message: "Removed from group successfully", removed: removed })
+   return;
   }
  }
 }

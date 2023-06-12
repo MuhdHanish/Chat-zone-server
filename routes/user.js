@@ -20,8 +20,8 @@ router.post('/chat', protect, chatContoller.accessChat);
 router.post('/group',protect,chatContoller.createGroupChat);
 
 // PUT -> chatController
-// router.put('/rename',protect,chatContoller.renameGroup);
-// router.put('/addtogroup', protect, chatContoller.addToGroup);
-// router.put('/groupremove', protect, chatContoller.removeFromGroup);
+router.put('/rename',protect,chatContoller.renameGroup);
+router.put('/addtogroup', protect, chatContoller.addToGroup);
+router.put('/groupremove', protect, chatContoller.removeFromGroup);
 
 module.exports = router;
