@@ -1,4 +1,3 @@
-const datas = require('../data/data');
 const bcrypt = require('bcryptjs')
 const userCollection = require('../model/userModel');
 const generateToken = require('../security/generateToken');
@@ -13,24 +12,22 @@ module.exports = {
    return;
   }
  },
- getChats: async (req, res) => {
-  try {
-   const chats = datas;
-   res.status(200).json({ message: 'Datas fetched successfully', chats: chats })
-   return;
-  } catch (err) {
+ getUsers: async(req,res) =>{
+  try{
+   const keyWord = req.query.search ? {
+    $or:  [
+     { name: { $regex: req.query.search, $options: "i" } },
+     { email: { $regex: req.query.search, $options: "i" } }
+    ]
+   } : {}
+   console.log(keyWord)
+   const users = await userCollection.find(keyWord).find({_id: { $ne: req.user._id }})
+   if(users){
+    res.status(200).json({ message: 'Users fetched successfully', users: users })
+   }
+  }catch(err){
    res.status(500).json({ message: err.message });
    return;
-  }
- },
- getChat: async (req, res) => {
-  try {
-   const chatId = req.params.id;
-   const chat = datas.find(chat => chat._id === chatId);
-   res.status(200).json({ message: 'Data fetched sucessfully', chat: chat })
-   return;
-  } catch (err) {
-   res.status(500).json({ message: err.message });
   }
  },
  registerUser: async (req, res) => {

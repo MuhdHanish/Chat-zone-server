@@ -1,15 +1,27 @@
 const express = require('express');
 const router = express();
 const userController = require('../controller/userController');
+const chatContoller = require('../controller/chatController');
+const protect = require('../middleware/authMiddleware');
 
-// GET 
+// GET -> userController
 router.get('/',userController.getHome);
-router.get('/api/chat',userController.getChats);
-router.get('/api/chat/:id',userController.getChat);
+router.get('/users',protect,userController.getUsers);
 
-
-// POST
+// POST -> userController
 router.post('/register',userController.registerUser);
 router.post('/login',userController.loginUser);
+
+// GET -> chatController
+router.get('/chat',chatContoller.fetchChats);
+
+// POST -> chatContoller
+router.post('/chat',protect, chatContoller.accessChat);
+router.post('/group',protect,chatContoller.createGroupChat);
+
+// PUT -> chatController
+router.put('/rename',protect,chatContoller.renameGroup);
+router.put('/addtogroup', protect, chatContoller.addToGroup);
+router.put('/groupremove', protect, chatContoller.removeFromGroup);
 
 module.exports = router;

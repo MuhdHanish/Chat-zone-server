@@ -1,6 +1,6 @@
 const express = require('express');
 const connect = require('./config/connection');
-const { notFound, errorHandler } = require('./middleware/errorMiddeleware');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const colors = require('colors');
 
