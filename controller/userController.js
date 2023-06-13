@@ -49,6 +49,9 @@ module.exports = {
       message: 'Registered successfully',
       user: {
        _id: user._id,
+       name: user.name,
+       email:user.email,
+       profile:user.profile,
        token: generateToken(user._id)
       }
      });
@@ -73,6 +76,9 @@ module.exports = {
      res.status(200).json({
       message: "Login successfully", user: {
        _id: userExist._id,
+       name: userExist.name,
+       email: userExist.email,
+       profile: userExist.profile,
        token: generateToken(userExist._id)
       }
      })
