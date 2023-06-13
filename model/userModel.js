@@ -9,7 +9,7 @@ const userModel = Schema(
   password: { type: String, required: true },
   profile: { 
    type: String,
-   default: 'https://static.vecteezy.com/system/resources/previews/013/042/571/original/default-avatar-profile-icon-social-media-user-photo-in-flat-style-vector.jpg' 
+   default: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg' 
   }
  },
  {
