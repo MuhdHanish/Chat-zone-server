@@ -72,7 +72,7 @@ module.exports = {
    }
    const users = JSON.parse(req.body.users);
    if (users.length < 2) {
-    res.status(400).json({ message: "More than 2 users are requried" })
+   return res.status(400).json({ message: "More than 2 users are requried" })
    }
    users.push(req.user);
    const groupChat = await chatCollection.create({
