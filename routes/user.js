@@ -2,6 +2,7 @@ const express = require('express');
 const router = express();
 const userController = require('../controller/userController');
 const chatContoller = require('../controller/chatController');
+const messageController = require('../controller/messageController')
 const protect = require('../middleware/authMiddleware');
 
 // GET -> userController
@@ -23,5 +24,11 @@ router.post('/group',protect,chatContoller.createGroupChat);
 router.put('/rename',protect,chatContoller.renameGroup);
 router.put('/addtogroup', protect, chatContoller.addToGroup);
 router.put('/groupremove', protect, chatContoller.removeFromGroup);
+
+// GET -> messageController
+router.get('/message/:chatId',protect,messageController.allMessages)
+
+// POST -> messageController 
+router.post('/message',protect,messageController.sendMessage)
 
 module.exports = router;

@@ -42,7 +42,7 @@ module.exports = {
      name,
      email,
      password: hashPassword,
-     image
+     profile:image
     });
     if (user) {
      res.status(201).json({
