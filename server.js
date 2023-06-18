@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true}))
 
 const cors = require('cors');
 app.use(cors({
- origin: ["http://localhost:3000",process.env.CORS_ORIGIN_URL],
+ origin: process.env.CORS_ORIGIN_URL,
  methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 
