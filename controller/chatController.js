@@ -14,9 +14,9 @@ module.exports = {
       path: "latestMessage.sender",
       select: "name email profile"
      });
-     res.status(200).json({ message: 'Datas fetched successfully', chats: results })
+     return res.status(200).json({ message: 'Datas fetched successfully', chats: results });
     });
-   return;
+
   } catch (err) {
    res.status(500).json({ message: err.message });
    return;

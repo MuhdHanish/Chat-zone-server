@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true}))
 
 const cors = require('cors');
 app.use(cors({
- origin: process.env.CORS_ORIGIN_URL,
+origin: ["http://localhost:3000",process.env.CORS_ORIGIN_URL],
  methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 
@@ -31,7 +31,7 @@ const server = app.listen(PORT, () => console.log(`Server started on port ${PORT
 const io = require('socket.io')(server, {
  pingTimeout: 60000,
  cors: {
-  origin: process.env.CORS_ORIGIN_URL
+  origin: ["http://localhost:3000", process.env.CORS_ORIGIN_URL]
  }
 })
 io.on("connection", (socket) => {
